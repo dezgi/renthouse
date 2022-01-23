@@ -8,31 +8,7 @@ class Database():
     def __init__(self):
         self.conn = sqlite3.connect("database.db")
         self.name= "Database"
-             
-    @staticmethod
-    def getinternshippositions():
-        conn = sqlite3.connect("database.db")
-        c = conn.cursor()
-
-    @staticmethod 
-    def authenticationForUser(account):
-        conn = sqlite3.connect("database.db")
-        c = conn.cursor()
-        keyUsername = account[0]
-        keyPassword = account[1]
-
-        ACCOUNT = c.execute("SELECT username,password FROM User WHERE username = ? AND password = ?",
-                             (keyUsername, keyPassword,))
-        ID = ACCOUNT.fetchall()
-
-        conn.commit()
-        conn.close()
-
-        if ID == []:
-            return None
-        else:
-            return ID[0][0]
-
+    
     @staticmethod
     def userregistration(registrationDetails):
         conn = sqlite3.connect("database.db")
@@ -53,6 +29,32 @@ class Database():
         conn.commit()
         conn.close()
         return True
+
+    @staticmethod 
+    def authenticationForUser(account):
+        conn = sqlite3.connect("database.db")
+        c = conn.cursor()
+        keyUsername = account[0]
+        keyPassword = account[1]
+
+        ACCOUNT = c.execute("SELECT username,password FROM User WHERE username = ? AND password = ?",
+                             (keyUsername, keyPassword,))
+        ID = ACCOUNT.fetchall()
+
+        conn.commit()
+        conn.close()
+
+        if ID == []:
+            return None
+        else:
+            return ID[0][0]
+    
+    
+    ########## FURKAN #########
+    @staticmethod
+    def getinternshippositions():
+        conn = sqlite3.connect("database.db")
+        c = conn.cursor()
 
     @staticmethod
     def addAdvertisement(ad_details):
@@ -102,45 +104,33 @@ class Database():
         else:
             return userlist
 
+
+
+            ########### Log ##########
     @staticmethod
     def addingUserLog(sessionid,username):
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
         c.execute(
-            "INSERT INTO userlog(sessionid, username)VALUES(?,?)",(sessionid,username,))
+            "INSERT INTO UserLog(sessionid, username)VALUES(?,?)",(sessionid,username,))
         conn.commit()
         conn.close()
-
-    @staticmethod
-    def get_user_of_the_session(sessionid):
-        conn = sqlite3.connect("database.db")
-        c = conn.cursor()
-        user = c.execute(
-            "SELECT DISTINCT username FROM Userlog WHERE sessionid = ?", (sessionid,))
-        userofSession = user.fetchone()
-        conn.commit()
-        conn.close()
-        if userofSession is not None:
-            return userofSession[0]
-        else:
-            return None
-
 
     @staticmethod
     def updateUserLog(sessionid,status):
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
         c.execute(
-            "UPDATE Userlog SET status = ? WHERE sessionid = ?",(status,sessionid,))
+            "UPDATE UserLog SET status = ? WHERE sessionid = ?",(status,sessionid,))
         conn.commit()
         conn.close()
 
     @staticmethod
-    def getuserLogStatus(sessionid):
+    def getUserLogStatus(sessionid):
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
         status = c.execute(
-            "SELECT status FROM Userlog WHERE sessionid = ?", (sessionid,))
+            "SELECT status FROM UserLog WHERE sessionid = ?", (sessionid,))
 
         sessionStatus = status.fetchone()
 
@@ -151,6 +141,23 @@ class Database():
         else:
             return None
 
+    @staticmethod
+    def get_user_of_the_session(sessionid):
+        conn = sqlite3.connect("database.db")
+        c = conn.cursor()
+        user = c.execute(
+            "SELECT DISTINCT username FROM UserLog WHERE sessionid = ?", (sessionid,))
+        userofSession = user.fetchone()
+        conn.commit()
+        conn.close()
+        if userofSession is not None:
+            return userofSession[0]
+        else:
+            return None
+
+            
+            
+            ############# Database ############
     @staticmethod
     def checkDatabesExistance():
         conn = sqlite3.connect('database.db')
@@ -196,11 +203,10 @@ class Database():
                     FOREIGN KEY(cityname) REFERENCES City (cname)
                     )""")
 
-       
-        c.execute("""CREATE TABLE Userlog(
-                     sessionid TEXT PRIMARY KEY,
-                     username TEXT NOT NULL,
-                     status INTEGER DEFAULT -1)""")
+        c.execute("""CREATE TABLE UserLog(
+                    sesionid TEXT PRIMARY KEY,
+                    username TEXT NOT NULL,
+                    status INTEGER DEFAULT 0)""")
 
         cities = [(1, 'Lefkosa'),
                   (2, 'Girne'),

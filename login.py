@@ -7,14 +7,13 @@ import os
 htmlLogin = """
 <html>
     <head>
-        <title>Login</title>
+        <title>Login Page</title>
         <link rel="stylesheet" href="common.css">
     </head>
     <body>
         <div class="form-container">
-            <form  action="cookieCreator.py" method="post">
+            <form  action="loginCheck.py" method="post">
                 <h1>Login</h1>
-                <span>use your account</span>
                 <input type="text" placeholder="Username" name="username"/>
                 <input type="password" placeholder="Password" name="password"/>
                 <button type = "submit" id="signInNow" >Login</button>
@@ -30,5 +29,5 @@ htmlLogin = """
 print(htmlLogin)
 if "HTTP_COOKIE" in os.environ:
     cookie = Cookie.SimpleCookie(os.environ["HTTP_COOKIE"])
-    cUser = db.getSessionUsername(cookie["sessionID"].value)
-    db.updateLogStatus(cookie["sessionID"].value,-1)
+    cUser = db.get_user_of_the_session(cookie["sessionid"].value)
+    db.updateUserLog(cookie["sessionid"].value,-1)

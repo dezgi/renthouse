@@ -17,7 +17,7 @@ def randomID():
 htmlHeader = """
 <html>
     <head>
-        <title>Login User</title>  
+        <title>Add House</title>  
         <link rel="stylesheet" href="common.css">
     </head>
     <body>
@@ -30,6 +30,7 @@ htmlLoginFailed = """
 """
 
 htmlSuccessful = """
+    <h3 style="align: center">Login Successful</h3>
     <script type="text/javascript">
         window.location = "http://localhost:8080/renthouse/loginCookie.py";
     </script>
@@ -39,22 +40,22 @@ htmlSuccessful = """
 form = cgi.FieldStorage()
 username_ = form.getvalue("username")
 password_ = form.getvalue('password')
-liste = [username_, password_]
+inputs = [username_, password_]
 
-user = db.authenticationForUser(liste)
-sessionID = randomID()
+user = db.authenticationForUser(inputs)
+sessionid = randomID()
 
 if user is not None:
     cookie = Cookie.SimpleCookie()
-    cookie["session"] = sessionID
+    cookie["session"] = sessionid
     cookie["session"]["domain"] = "localhost/"
     cookie["session"]["path"] = "/"
-    cookie["sessionID"] = sessionID
+    cookie["sessionid"] = sessionid
     print("Content-type: text/html")
     print("{}".format(cookie.output()))
     print(htmlHeader)
     print(htmlSuccessful)
-    db.addLog(sessionID,user)
+    db.addingUserLog(sessionid,user)
 
 else:
     print(htmlHeader)

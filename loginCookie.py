@@ -52,96 +52,91 @@ htmlKeyError = """
     <button type = "button" onclick = "window.location.href='login.py'">Back</button>
 """
 
-
-
-htmlNewPosition = """
-    <h2>Post your Job</h2>
+htmlNewAd = """
+    <h2>New Advertisement</h2>
             <div class="form-container tableBox">
                 <form action="post.py" method="post">
-                    <h2>Create a Job Position</h2>
-                    <span>Fill the blanks</span>
-                    <input type="text" placeholder="Position Name"  name="position"/>
-                    <input type="text" placeholder="Description" name="description"/>
-                    <input type="text" placeholder="Expectation" name="expectation"/>
-                    <input type="date" placeholder="Deadline" name="deadline"/>
+                    <h2>Create a New Advertisement</h2>
+                    <input type="text" placeholder="Street"  name="street"/>
+                    <input type="text" placeholder="City" name="city"/>
+                    <input type="text" placeholder="Number of Bedrooms" name="noofbedrooms"/>
+                    <input type="text" placeholder="Monthly Fee" name="monthlyfee"/>
                     <button type = "submit" id="post">Post</button><br>
                     <button type = "button" onclick = "window.location.href='index.py'">Log Out</button>
                 </form>
         </div>
 """
 
-htmltable = """
-        <br><br><div class="tableBox">
-            <span class="counter pull-right"></span>
-            <table class="tableVisual">
-                <thead>
-                <tr>
-                    <th>{userCapital}</th>
-                </tr>
-                <tr>
-                    <th>Position Name</th>
-                    <th>Description</th>
-                    <th>Expectations</th>
-                    <th>Deadline</th>
-                </tr>
-                </thead>
-                <tbody>
-"""
+# htmltable = """
+#         <br><br><div class="tableBox">
+#             <span class="counter pull-right"></span>
+#             <table class="tableVisual">
+#                 <thead>
+#                 <tr>
+#                     <th>{userCapital}</th>
+#                 </tr>
+#                 <tr>
+#                     <th>Position Name</th>
+#                     <th>Description</th>
+#                     <th>Expectations</th>
+#                     <th>Deadline</th>
+#                 </tr>
+#                 </thead>
+#                 <tbody>
+# """
 
-htmlrow = """
-            <tr> 
-                <td>{i[0]}</td>
-                <td>{i[1]}</td>
-                <td>{i[2]}</td>
-                <td>{i[3]}</td>
-            </tr>
-"""
+# htmlrow = """
+#             <tr> 
+#                 <td>{i[0]}</td>
+#                 <td>{i[1]}</td>
+#                 <td>{i[2]}</td>
+#                 <td>{i[3]}</td>
+#             </tr>
+# """
 
-htmlEmpty= """
-                <tr> 
-                    <td>No internship position available at the moment</td>
-                </tr>
-"""
-htmltableEnd= """
-            </tbody>
-        </table>
-    </div>
-"""
+# htmlEmpty= """
+#                 <tr> 
+#                     <td>No internship position available at the moment</td>
+#                 </tr>
+# """
+# htmltableEnd= """
+#             </tbody>
+#         </table>
+#     </div>
+# """
 
 
 htmlend = """
         </body>
-</html>
-"""
+ </html>
+ """
 
 print("Content-type: text/html")
 print(htmlHeader)
 if "HTTP_COOKIE" in os.environ:
     cookie = Cookie.SimpleCookie(os.environ["HTTP_COOKIE"])
     try:
-        if db.getLogStatus(cookie["sessionID"].value) == -1:
+        if db.getUserLogStatus(cookie["sessionid"].value) == -1:
             print(htmlLoginError)
         else:
-            cUser = db.getSessionUsername(cookie["sessionID"].value)
+            cUser = db.get_user_of_the_session(cookie["sessionid"].value)
             if cUser is None:
                 print(htmlSessionUserError)
             else:
-                db.updateLogStatus(cookie["sessionID"].value, 1)
-                print(htmlNewPosition)
-                position = db.getinternshippositionsforacompany(cUser)
-                userCapital = cUser.capitalize()
-                print(htmltable.format(**locals()))
+                db.updateUserLog(cookie["sessionid"].value, 1)
+                print(htmlNewAd)
+                #position = db.getinternshippositionsforacompany(cUser)
+                #userCapital = cUser.capitalize()
+                # print(htmltable.format(**locals()))
 
-                if len(position) == 0:
-                    print(htmlEmpty)
-                else:
-                    for i in position:
-                        print(htmlrow.format(**locals()))
-                    print(htmltableEnd)
+                # if len(position) == 0:
+                #     print(htmlEmpty)
+                # else:
+                #     for i in position:
+                #         print(htmlrow.format(**locals()))
+                #     print(htmltableEnd)
     except KeyError:
         print(htmlKeyError)
-
-
 else:
     print(htmlCookieError)
 print(htmlend)
