@@ -108,29 +108,29 @@ class Database():
 
             ########### Log ##########
     @staticmethod
-    def addingUserLog(sessionid,username):
+    def addingUserLog(sessionID,username):
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
         c.execute(
-            "INSERT INTO UserLog(sessionid, username)VALUES(?,?)",(sessionid,username,))
+            "INSERT INTO UserLog(sessionID, username)VALUES(?,?)",(sessionID,username,))
         conn.commit()
         conn.close()
 
     @staticmethod
-    def updateUserLog(sessionid,status):
+    def updateUserLog(sessionID,status):
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
         c.execute(
-            "UPDATE UserLog SET status = ? WHERE sessionid = ?",(status,sessionid,))
+            "UPDATE UserLog SET status = ? WHERE sessionID = ?",(status,sessionID,))
         conn.commit()
         conn.close()
 
     @staticmethod
-    def getUserLogStatus(sessionid):
+    def getUserLogStatus(sessionID):
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
         status = c.execute(
-            "SELECT status FROM UserLog WHERE sessionid = ?", (sessionid,))
+            "SELECT status FROM UserLog WHERE sessionID = ?", (sessionID,))
 
         sessionStatus = status.fetchone()
 
@@ -142,11 +142,11 @@ class Database():
             return None
 
     @staticmethod
-    def get_user_of_the_session(sessionid):
+    def get_user_of_the_session(sessionID):
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
         user = c.execute(
-            "SELECT DISTINCT username FROM UserLog WHERE sessionid = ?", (sessionid,))
+            "SELECT DISTINCT username FROM UserLog WHERE sessionID = ?", (sessionID,))
         userofSession = user.fetchone()
         conn.commit()
         conn.close()
@@ -204,7 +204,7 @@ class Database():
                     )""")
 
         c.execute("""CREATE TABLE UserLog(
-                    sesionid TEXT PRIMARY KEY,
+                    sessionID TEXT PRIMARY KEY,
                     username TEXT NOT NULL,
                     status INTEGER DEFAULT 0)""")
 

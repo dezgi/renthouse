@@ -31,5 +31,5 @@ htmlSignUP = """
 print(htmlSignUP)
 if "HTTP_COOKIE" in os.environ:
     cookie = Cookie.SimpleCookie(os.environ["HTTP_COOKIE"])
-    cUser = db.get_user_of_the_session(cookie["sessionid"].value)
-    db.updateUserLog(cookie["sessionid"].value,-1)
+    cUser = db.get_user_of_the_session(cookie["sessionID"].value)
+    db.updateUserLog(cookie["sessionID"].value,-1)

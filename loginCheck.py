@@ -10,7 +10,7 @@ def randomID():
     choiceStr = ""
     for i in range(3):
         choiceStr = choiceStr + random.choice(string.ascii_letters)
-    number = random.randint(1000000, 9999999)
+    number = random.randint(1, 1000000)
     ID = str(number) + choiceStr
     return ID
 
@@ -43,19 +43,19 @@ password_ = form.getvalue('password')
 inputs = [username_, password_]
 
 user = db.authenticationForUser(inputs)
-sessionid = randomID()
+sessionID = randomID()
 
 if user is not None:
     cookie = Cookie.SimpleCookie()
-    cookie["session"] = sessionid
+    cookie["session"] = sessionID
     cookie["session"]["domain"] = "localhost/"
     cookie["session"]["path"] = "/"
-    cookie["sessionid"] = sessionid
+    cookie["sessionID"] = sessionID
     print("Content-type: text/html")
     print("{}".format(cookie.output()))
     print(htmlHeader)
     print(htmlSuccessful)
-    db.addingUserLog(sessionid,user)
+    db.addingUserLog(sessionID,user)
 
 else:
     print(htmlHeader)

@@ -52,7 +52,7 @@ htmlUser = """
 cUser=""
 if "HTTP_COOKIE" in os.environ:
     cookies = Cookie.SimpleCookie(os.environ["HTTP_COOKIE"])
-    cUser = str(db.get_user_of_the_session(cookies["sessionid"].value))
+    cUser = str(db.get_user_of_the_session(cookies["sessionID"].value))
 
     form = cgi.FieldStorage()
 
